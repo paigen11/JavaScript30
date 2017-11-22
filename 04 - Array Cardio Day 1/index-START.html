@@ -27,32 +27,97 @@
       { first: 'Hanna', last: 'Hammarström', year: 1829, passed: 1909 }
     ];
 
-    const people = ['Beck, Glenn', 'Becker, Carl', 'Beckett, Samuel', 'Beddoes, Mick', 'Beecher, Henry', 'Beethoven, Ludwig', 'Begin, Menachem', 'Belloc, Hilaire', 'Bellow, Saul', 'Benchley, Robert', 'Benenson, Peter', 'Ben-Gurion, David', 'Benjamin, Walter', 'Benn, Tony', 'Bennington, Chester', 'Benson, Leana', 'Bent, Silas', 'Bentsen, Lloyd', 'Berger, Ric', 'Bergman, Ingmar', 'Berio, Luciano', 'Berle, Milton', 'Berlin, Irving', 'Berne, Eric', 'Bernhard, Sandra', 'Berra, Yogi', 'Berry, Halle', 'Berry, Wendell', 'Bethea, Erin', 'Bevan, Aneurin', 'Bevel, Ken', 'Biden, Joseph', 'Bierce, Ambrose', 'Biko, Steve', 'Billings, Josh', 'Biondo, Frank', 'Birrell, Augustine', 'Black, Elk', 'Blair, Robert', 'Blair, Tony', 'Blake, William'];
+    const people = ['Beck, Glenn', 'Becker, Carl', 'Beckett, Samuel', 'Beddoes, Mick', 'Beecher, Henry',
+        'Beethoven, Ludwig', 'Begin, Menachem', 'Belloc, Hilaire', 'Bellow, Saul', 'Benchley, Robert',
+        'Benenson, Peter', 'Ben-Gurion, David', 'Benjamin, Walter', 'Benn, Tony', 'Bennington, Chester',
+        'Benson, Leana', 'Bent, Silas', 'Bentsen, Lloyd', 'Berger, Ric', 'Bergman, Ingmar', 'Berio, Luciano',
+        'Berle, Milton', 'Berlin, Irving', 'Berne, Eric', 'Bernhard, Sandra', 'Berra, Yogi', 'Berry, Halle',
+        'Berry, Wendell', 'Bethea, Erin', 'Bevan, Aneurin', 'Bevel, Ken', 'Biden, Joseph', 'Bierce, Ambrose',
+        'Biko, Steve', 'Billings, Josh', 'Biondo, Frank', 'Birrell, Augustine', 'Black, Elk', 'Blair, Robert',
+        'Blair, Tony', 'Blake, William'];
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    const fifteenHundredsBorn = inventors.filter(inventor => inventor.year > 1499 && inventor.year <= 1599);
+    //console.table is awesome!
+    console.table(fifteenHundredsBorn);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    //map takes in an array and returns a new array of the same size with some manipulation of the original array
+    const inventorsNames = inventors.map(inventor => `${inventor.first}  ${inventor.last}`);
+    console.log(inventorsNames);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const inventorsOldToYoung = inventors.sort((a,b) => a.year - b.year);
+    console.table(inventorsOldToYoung);
+
+    //second way to do it
+    const ordered = inventors.sort((a,b) => a.year > b.year ? 1 : -1);
+    console.table(ordered);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+    /* reduce just holds a total as it's first param and loops through the array of objects doing whatever it needs
+    to do before adding it to the accumulator param. The 0 passed at the end defines total before the loop begins
+    so it doesn't start as undefined */
+    const lifeSpan = inventors.reduce((total, inventor) => total + (inventor.passed - inventor.year), 0);
+    console.log(lifeSpan);
 
     // 5. Sort the inventors by years lived
+    const oldest = inventors.sort((c,d) => {
+        const lastGuy = c.passed - c.year;
+        const nextGuy = d.passed - d.year;
+        return lastGuy > nextGuy ? -1 : 1
+    });
+    console.table(oldest);
+
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
 
+//     const category = document.querySelector('.mw-category');
+    // you can call querySelector against any existing DOM element you've already selected with a query selector
+    /* we must change the NodeList from a node list into an array in order to use the map function
+    two ways to do this */
+    // way 1: const links = [...category.querySelectorAll('a')];
+//     way 2: const links = Array.from(category.querySelectorAll('a'));
+
+//    const de = links
+//        //map all the links according to their text content
+//        .map(link => link.textContent)
+//        //then filter that map just when the street name includes 'de'
+//        .filter(streetName => streetName.includes('de'));
+//
+//    console.log(de);
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const alpha = people.sort((lastOne, nextOne) => {
+        //split the names using destructuring into their two pieces
+        const [aLast, aFirst] = lastOne.split(', ');
+        const [bLast, bFirst] = nextOne.split(', ');
+        //if a is greater than b according to last name return 1
+        return aLast > bLast ? 1 : -1;
+    });
+    console.log(alpha);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+
+    const transportation = data.reduce((obj, item) => {
+      //if the item doesn't exist in the empty object, create it and set its count equal to zero
+        if(!obj[item]){
+          obj[item] = 0;
+      }
+      //if the item already exists in the object, you can just add a one to the count as it loops through the strings
+        obj[item]++;
+      return obj;
+    }, {});
+
+    console.log(transportation);
 
   </script>
 </body>
