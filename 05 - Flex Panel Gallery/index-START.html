@@ -24,6 +24,7 @@
     .panels {
       min-height:100vh;
       overflow: hidden;
+      display: flex; /* gets the panels going side by side */
     }
 
     .panel {
@@ -41,6 +42,12 @@
       font-size: 20px;
       background-size:cover;
       background-position:center;
+
+      flex: 1; /* evenly distribute the space among the panels */
+      justify-content: center; /* justify-content property aligns the flexible container's items when the items do not use all available space on the main-axis */
+      align-content: center; /* instead of aligning flex items, it aligns flex lines */
+      display: flex; /* an element in css can be both a flex item and a flex container */
+      flex-direction: column; /* flex items displayed vertically as a column */
     }
 
 
@@ -50,11 +57,22 @@
     .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
     .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
 
+    /* flex items */
     .panel > * {
       margin:0;
       width: 100%;
       transition:transform 0.5s;
+
+      flex: 1 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    .panel > *:first-child { transform: translateY(-100%); }  /* hides the top row of the words */
+    .panel.open-active > *:first-child { transform: translateY(0); }  /* brings the words back into view */
+    .panel > *:last-child { transform: translateY(100%); }  /* hides the bottom row of the words */
+    .panel.open-active> *:last-child { transform: translateY(0); }
 
     .panel p {
       text-transform: uppercase;
@@ -67,6 +85,7 @@
     }
 
     .panel.open {
+      flex: 5; /* this indicates for the panel to transition to five times larger than the other panels when it has a class of open */
       font-size:40px;
     }
 
@@ -103,6 +122,22 @@
 
   <script>
 
+    const panels = document.querySelectorAll('.panel');
+
+    function toggleOpen() {
+        this.classList.toggle('open');
+    }
+
+    function toggleActive(e) {
+        console.log(e.propertyName);
+        if(e.propertyName.includes('flex')){
+            this.classList.toggle('open-active');
+        }
+    }
+
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen)); // loop through each panel and add an event listener to add the .open class when it's clicked
+    // writing toggleOpen without the () means it will only be referenced when the click happens, if the () are included it will happen on page load
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive)); // once the toggleOpen transition's done, the toggleActive function will fire to bring in the other words
   </script>
 
 
