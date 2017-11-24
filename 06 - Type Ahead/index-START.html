@@ -17,6 +17,53 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+const cities = [];
+
+/* fetch is a new api interface for making javascript HTTP calls, and it returns a promise of blob
+blob must be converted to JSON (and another promise) before it can be manipulated here as data
+fetch documentation here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch */
+fetch(endpoint)
+    .then(blob => blob.json())
+    .then(data => cities.push(...data)); //'spread' the array of data so it's not nested inside of the cities array
+
+function findMatches(wordToMatch, cities){
+    return cities.filter(place => {
+        //here we need to figure out if the city or state matches what was searched
+        //this regex will take in the param passed in wordToMatch and search it 'globally' and case 'insensitively'
+        //for more documentation on regex matching in JS: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+        const regex = new RegExp(wordToMatch, 'gi');
+        return place.city.match(regex) || place.state.match(regex);
+    });
+}
+
+//courtesy of stack overflow to add commas to the population numbers
+function numberWithCommas(x){
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+function displayMatches(){
+    const matchArray = findMatches(this.value, cities);
+    const html = matchArray.map(place => {
+        //this will display the city or state and the population in a nice li that's styled by the css style file
+        const regex = new RegExp(this.value, 'gi');
+        const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+        const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+        return `
+        <li>
+            <span class="name">${cityName}, ${stateName}</span>
+            <span class="population">${numberWithCommas(place.population)}</span>
+        </li>
+        `;
+    }).join('') ;
+    suggestions.innerHTML = html;
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchInput.addEventListener('change', displayMatches); //runs display matches every time a user clicks off the search box
+searchInput.addEventListener('keyup', displayMatches); //runs every time a user clicks a key
+
 </script>
   </body>
 </html>
