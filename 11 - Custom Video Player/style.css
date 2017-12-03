@@ -27,6 +27,7 @@ body {
   overflow: hidden;
 }
 
+
 /* This css is only applied when fullscreen is active. */
 .player:fullscreen {
   max-width: none;
@@ -52,6 +53,11 @@ body {
   padding: 0;
   cursor:pointer;
   max-width:50px;
+}
+
+.fullscreen img{
+  width:16px;
+  height:16px;
 }
 
 .player__button:focus {

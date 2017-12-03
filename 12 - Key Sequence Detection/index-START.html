@@ -7,6 +7,23 @@
 </head>
 <body>
 <script>
+  const pressed = []; //the keys someone is pressing on the page
+  const secretCode = 'paige';
+
+  //this listens for the key someone has pressed while on the page
+  window.addEventListener('keyup', (e) => {
+      console.log(e.key);
+      pressed.push(e.key);
+      /* to begin at the end of the array, use -secretCode.length, then the deleteCount is the array length minus
+      the length of the secret code, and it pushes out the first letter presses when it reaches that length
+       */
+      pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+      if(pressed.join('').includes(secretCode)){
+          console.log("DING DING!");
+          cornify_add();
+      }
+      console.log(pressed);
+  })
 </script>
 </body>
 </html>

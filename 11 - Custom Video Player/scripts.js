@@ -7,7 +7,7 @@ const progressBar = player.querySelector('.progress__filled');
 const toggle = player.querySelector('.toggle');
 const skipButtons = player.querySelectorAll('[data-skip]');
 const ranges = player.querySelectorAll('.player__slider');
-const fullscreen = player.querySelector('.fullscreen__button');
+const fullscreen = player.querySelector('.fullscreen');
 
 /* build the functions */
 
@@ -46,6 +46,25 @@ function scrub(e) {
     console.log(e);
 }
 
+function toggleFullscreen(elem) {
+    elem = player;
+    if (!document.fullscreenElement &&
+        !document.webkitFullscreenElement) {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+            //webkit required for chrome browser compatibility
+            elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+}
+
 
 /* hook up the event listeners */
 
@@ -76,5 +95,4 @@ progress.addEventListener('mousmeove', (e) => mousedown && scrub(e)); // checks 
 progress.addEventListener('mousedown', () => mousedown = true);
 progress.addEventListener('mouseup', () => mousedown = false);
 
-//TODO: challenge add a full screen button that takes the video full screen when clicked
-// fullscreen.addEventListener('click', changeVideoSize);
+fullscreen.addEventListener('click', () => toggleFullscreen());
