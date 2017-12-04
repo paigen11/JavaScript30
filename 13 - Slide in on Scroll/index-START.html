@@ -43,6 +43,10 @@
   </div>
 
   <script>
+    /* Debounce functions are included in many JavaScript libraries (like lodash). The goal behind each implementation
+    is to reduce overhead by preventing a function from being called several times in succession.
+    Regardless of the library, all debounce functions are built on JavaScript’s native setTimeout function. */
+    // debounce will only allow a function to run once every 20 ms
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -57,6 +61,35 @@
         if (callNow) func.apply(context, args);
       };
     }
+
+    //gather all the sliding images
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide(e){
+      sliderImages.forEach(sliderImage => {
+          // scrollY + innerHeight gives us the pixel level for where you currently are at the bottom of the screen
+          // subtracting half of the image's height means it will start to slide in when its scrolled halfway through the image
+          const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 2 ;
+
+          // this will reverse the animation if a user scrolls past the image on the page
+          // offsetTop returns the distance of the current element relative to the top of the page (or parent node)
+          const imageBottom = sliderImage.offsetTop + sliderImage.height;
+
+          // checks if image is halfway visible while scrolling
+          const isHalfShown = slideInAt > sliderImage.offsetTop;
+
+          // checks if image is still visible while scrolling
+          const isNotScrolledPast = window.scrollY < imageBottom;
+
+          if(isHalfShown && isNotScrolledPast){
+              sliderImage.classList.add('active');
+          } else {
+              sliderImage.classList.remove('active');
+          }
+      })
+    }
+
+    window.addEventListener('scroll', debounce(checkSlide));
 
   </script>
 
