@@ -37,10 +37,34 @@
 <script>
   const hero = document.querySelector('.hero');
   const text = hero.querySelector('h1');
+  // how far out the shadow should go from the text
+  const walk = 100; //100px
 
   function shadow(e) {
       // es6 destructuring getting the height and width of the hero text
-    const {offsetWidth: width, offsetHeight : height}
+    const {offsetWidth: width, offsetHeight : height} = hero;
+//    console.log(height, width);
+    // more es6 destructuring to get the location of the cursor
+    let {offsetX: x, offsetY: y} = e;
+
+      /*  we need to normalize the x and y because if a user mouses over the child h1 div,
+  it resets the x,y pixel locations instead of normalizing them across the whole window object  */
+    console.log(this, e.target);
+    // this will always be equal to the hero, but the target will change between the hero and the h1 depending on the mouse
+    if(this !== e.target) {
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+    }
+
+//      console.log(x,y);
+
+      // this math says if our walk is 100, instead of going to 0 or 200, we'll do just -50 or 50 in either direction
+      const xWalk = Math.round((x / width * walk) - (walk / 2));
+      const yWalk = Math.round((y / height * walk) - (walk / 2));
+
+      console.log(xWalk, yWalk);
+
+      text.style.textShadow = `${xWalk}px ${yWalk}px 0 red`;
   }
 
   hero.addEventListener('mousemove', shadow);
