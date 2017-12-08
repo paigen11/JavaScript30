@@ -44,8 +44,25 @@
   <ul id="bands"></ul>
 
 <script>
-const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+  const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean',
+    'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper',
+    'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
 
+// regexp to strip away the a, an or the from the front of the bands name and trim so there's no spaces after
+  function strip(bandName) {
+    return bandName.replace(/^(a |the |an )/i, '').trim()
+  }
+
+// this doesn't modify the original data, it just manipulates it so we can sort it the way we want
+  const sortedBands = bands.sort((a, b) => (strip(a) > strip(b)) ? 1 : -1);
+
+//console.log(sortedBands);
+
+  /* this takes the element, sets the inner html to be the sorted bands and loops over each band,
+  putting them as a line item and joining them together into one big string rather than a bunch of strings
+  with a comma in between each
+   */
+  document.querySelector('#bands').innerHTML = sortedBands.map(band => `<li>${band}</li>`).join('');
 
 </script>
 
