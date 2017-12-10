@@ -191,11 +191,13 @@
   const seconds = timeNodes
       // map timeNodes from an array of objects to an array of strings
       .map(node => node.dataset.time)
-      // then take each time and use es6 destructuring to separate the mins and seconds in each string
+      // then take each time and use es6 destructuring to separate the mins and seconds in each string then parse it into numbers
       .map(timeCode => {
-          const [mins, secs] = timeCode.split(':');
-      });
-  console.log(seconds);
+          const [mins, secs] = timeCode.split(':').map(parseFloat);
+          return (mins * 60) + secs;
+      })
+      // use reduce to add all the seconds together into one time
+      .reduce((total, vidSeconds) => total + vidSeconds);
 
 
 </script>
