@@ -182,6 +182,22 @@
     </li>
   </ul>
 <script>
+
+  // we must convert the node list
+  const timeNodes = [...document.querySelectorAll('[data-time]')];
+//  const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
+  console.log(timeNodes);
+
+  const seconds = timeNodes
+      // map timeNodes from an array of objects to an array of strings
+      .map(node => node.dataset.time)
+      // then take each time and use es6 destructuring to separate the mins and seconds in each string
+      .map(timeCode => {
+          const [mins, secs] = timeCode.split(':');
+      });
+  console.log(seconds);
+
+
 </script>
 </body>
 </html>
