@@ -199,6 +199,18 @@
       // use reduce to add all the seconds together into one time
       .reduce((total, vidSeconds) => total + vidSeconds);
 
+  let secondsLeft = seconds;
+  // get just the total number of hours, we don't care here about the minutes left over
+  const hours = Math.floor(secondsLeft / 3600);
+  secondsLeft = secondsLeft % 3600;
+//  console.log(secondsLeft)
+
+  // same as hours, just get the total number of mins
+  const mins = Math.floor(secondsLeft / 60);
+  // finally, get any leftover seconds and just take whatever's leftover
+  secondsLeft = secondsLeft % 60;
+
+  console.log(hours, mins, secondsLeft);
 
 </script>
 </body>
