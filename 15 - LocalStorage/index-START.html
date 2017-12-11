@@ -28,7 +28,64 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  // to return a stringified JSON value to its former self, parse it, if it exists in local storage
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+
+  function addItem(e){
+      // this stops the page from reloading when the submit button is clicked
+    e.preventDefault();
+//      console.log('hello');
+      // the 'this' refers to the form already targeted and it looks for the 'name' attribute on the form
+      const text = (this.querySelector('[name=item]')).value;
+      const item = {
+          // es6 shorthand since the params and variable name are the same
+          text,
+          done: false
+      };
+//      console.log(item);
+
+      items.push(item);
+      populateList(items, itemsList);
+      // to store the items in local storage to your browser, use .setItem and stringify the item so it can be stored
+      localStorage.setItem('items', JSON.stringify(items));
+      // to clear the form after
+      this.reset();
+  }
+
+  function populateList(plates = [], platesList){
+      platesList.innerHTML = plates.map((plate, i) => {
+          // the id and the for from the input and label the label link the two together
+         return `
+          <li>
+            <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''}>
+            <label for="item${i}">${plate.text}</label>
+          </li>
+         `;
+      }).join('');
+  }
+
+  function toggleDone(e){
+      if(!e.target.matches('input')) return; // skip this unless it's an input
+
+      const el = e.target;
+
+      // this gets the index for each li in the list and lets you know which one's been checked or unchecked
+      const index = el.dataset.index;
+
+      // if the item with that index has done, it will set it to the opposite, which is not done, and vice versa
+      items[index].done = !items[index].done;
+      localStorage.setItem('items', JSON.stringify(items));
+      populateList(items, itemsList);
+  }
+
+  addItems.addEventListener('submit', addItem);
+  // this targets the parent element of the list items, plates and when they're created, if they're clicked on, toggle the done to true or false
+  itemsList.addEventListener('click', toggleDone);
+
+  // call this as soon as the page is loaded to populate any items saved in the local storage
+  populateList(items, itemsList);
+
+  //todo: challenge, button for clear all and check all
 
 </script>
 
