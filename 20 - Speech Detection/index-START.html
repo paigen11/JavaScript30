@@ -12,6 +12,47 @@
 <script>
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+  const recognition = new SpeechRecognition();
+
+  // this allows the speech recognition to follow you in real time instead of waiting til you stop talking to print out your speech
+  recognition.interimResults = true;
+
+  let p = document.createElement('p');
+
+  const words = document.querySelector('.words');
+  words.appendChild(p);
+
+  recognition.addEventListener('results', e => {
+      console.log(e.results);
+      // take the array of generated speech recognition results and tranform it into an array with all those properties
+      const transcript = Array.from(e.results)
+          // map over it the first time and get the object with the words in it
+          .map(result => result[0])
+          // them map a second time to get just the transcript piece inside of each result
+          .map(result => result.transcript)
+          // join the strings together
+          .join('');
+
+      p.textContent = transcript;
+
+      // when a person finishes speaking, this adds the paragraph to the document and waits for the next one (without overwriting previous ones)
+      if(e.results[0].isFinal){
+          p = document.createElement('p');
+          words.appendChild(p);
+      }
+
+      // this is the type of stuff that could run functions (like when a users says 'getting the weather' run a weather function
+      if(transcript.includes('unicorn')){
+          console.log('+ unicorn!!!!!!!!');
+      }
+
+      console.log(transcript);
+  });
+
+  // now if someone starts talking then stops then starts again, it will continue listening and start again
+  recognition.addEventListener('end', recognition.start);
+
+  recognition.start();
 
 </script>
 
