@@ -58,6 +58,24 @@
     /*Compass: https://thenounproject.com/search/?q=compass&i=592352*/
   </style>
   <script>
+    /*  all of this is being run through the node server's browsersync and opened in xcode's
+    iphone simulator, with the debug location set to one of the movement patterns
+     */
+
+    const arrow = document.querySelector(".arrow");
+    const speed = document.querySelector('.speed-value');
+
+    // this gets the current posiiton over time, getCurrentPosition just gets the initial position for the user
+    navigator.geolocation.watchPosition((data) => {
+        console.log(data);
+        speed.textContent = data.coords.speed;
+        arrow.style.transform = `rotate(${data.coords.heading}deg)`;
+    }, (err) =>{ // what happens if user doesn't allow us to access their location
+        console.log(err);
+        alert('Hey, you gotta allow us to access your location for this to work.');
+    });
+
+
   </script>
 </body>
 </html>
