@@ -27,6 +27,42 @@
 
   <script>
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+
+    // get all the triggers on the page (all the toolbar links)
+    const triggers = document.querySelectorAll('a');
+
+    // create a span for the highlight
+    const highlight = document.createElement('span');
+    // add the .highlight class to that span
+    highlight.classList.add('highlight');
+    // add the new span to the window (it has no width or height, but it's there if you inspect the console)
+    document.body.append(highlight);
+
+
+    function highlightLink(){
+        // this gives us the size and where on the page the element lives
+      const linkCoords = this.getBoundingClientRect();
+
+      /* this will help us consolidate our coords and account for scrolls vertically and horizontally
+       while still centering the highlight on the links
+        */
+      const coords = {
+          width: linkCoords.width,
+          height: linkCoords.height,
+          left: linkCoords.left + window.scrollX,
+          top: linkCoords.top + window.scrollY
+      };
+
+      // this sets the width and height of the highlight link
+      highlight.style.width = `${coords.width}px`;
+      highlight.style.height = `${coords.height}px`;
+
+      highlight.style.transform = `translate(${coords.left}px,${coords.top}px)`;
+    }
+
+    // listen for the mouseenter event on each toolbar link and run the highlightLink function
+    triggers.forEach(a => a.addEventListener("mouseenter", highlightLink));
+
   </script>
 </body>
 </html>
