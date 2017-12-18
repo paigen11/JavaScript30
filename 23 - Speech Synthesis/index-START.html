@@ -35,6 +35,59 @@
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+
+  msg.text = document.querySelector('[name="text"]').value;
+
+  function populateVoices(){
+    voices = this.getVoices();
+//    console.log(voices);
+    const voiceOptions = voices
+        // filter down the voices to just english speaking ones
+        .filter(voice => voice.lang.includes('en'))
+        // map over each voice and add its name and language to the dropdown
+        .map(voice => `<option value = "${voice.name}">${voice.name} (${voice.lang})</option>`)
+        .join('');
+
+    voicesDropdown.innerHTML = voiceOptions;
+  }
+
+  function setVoice(){
+//      console.log('Changing voice');
+      // this will loop over every voice in the speech synthesis array and find the one that matches the selected value in the dropdown
+      msg.voice = voices.find(voice => voice.name === this.value);
+      toggle();
+  }
+
+  function toggle(startover = true){
+      // first cancel any thing that's currently speaking
+      speechSynthesis.cancel();
+
+      if(startover){
+          // in case you ever want it to not start over when toggle is called
+          speechSynthesis.speak(msg);
+      }
+  }
+
+  function setOption(){
+      // this gives us whatever option slider or text box was selected and what it was changed to
+      console.log(this.name, this.value);
+
+      msg[this.name] = this.value;
+      toggle();
+  }
+
+  // this speech synthesis is a new feature that fires getVoices on the speechsynthesis object when the voiceschanged event is called
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+
+  voicesDropdown.addEventListener('change', setVoice);
+  // for the sliders and text box
+  options.forEach(option => option.addEventListener('change', setOption));
+  // for the speak button
+  speakButton.addEventListener('click', toggle);
+  // for the stop button - making a new function is one of a few ways to pass the false value to the toggle function
+  stopButton.addEventListener('click', () => toggle(false));
+
 </script>
 
 </body>
