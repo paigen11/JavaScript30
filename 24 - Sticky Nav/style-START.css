@@ -23,6 +23,11 @@ body {
   transition: transform 0.5s;
 }
 
+.fixed-nav .site-wrap{
+  /* when fixed-nav is applied, the site will just slightly increase its size as the user scrolls down */
+  transform: scale(1);
+}
+
 header {
   text-align: center;
   height:50vh;
@@ -48,6 +53,11 @@ nav {
   z-index: 1;
 }
 
+.fixed-nav nav{
+  position: fixed;
+  box-shadow: 0 5px rgba(0,0,0,1);
+}
+
 nav ul {
   margin: 0;
   padding:0;
@@ -67,9 +77,15 @@ li.logo {
   max-width:0;
   overflow: hidden;
   background: white;
-  transition: all .5s;
+  transition: all 2s;
   font-weight: 600;
   font-size: 30px;
+}
+
+.fixed-nav li.logo{
+  /* max-width is set because you cannot animate something that starts from 0 to auto,
+  an actual width must be set instead*/
+  max-width:500px;
 }
 
 li.logo a {

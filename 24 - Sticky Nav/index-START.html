@@ -55,6 +55,29 @@
 
 <script>
 
+  const nav = document.querySelector('#main');
+
+  const topOfNav = nav.offsetTop;
+
+  function fixNav(){
+//    console.log(topOfNav, window.scrollY);
+      // so when the window's vertically equal to or greater than the top of the nav, a fixed-nav class is added
+    if(window.scrollY >= topOfNav){
+        /* when nav is fixed by css, it no longer takes up space on the page so it reflows
+        until you add padding to offset that amount and prevent the jerky jump
+         */
+        // this gives us whatever height the nav is
+        document.body.style.paddingTop = nav.offsetHeight + 'px';
+        document.body.classList.add('fixed-nav');
+    } else {
+        document.body.style.paddingTop = '0px';
+        document.body.classList.remove('fixed-nav');
+    }
+  }
+
+  // this will help us figure out how far from the top of the page the nav bar is as the user scrolls
+  window.addEventListener('scroll', fixNav);
+
 </script>
 
 </body>
