@@ -40,6 +40,33 @@
 <button></button>
 <script>
 
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
+
+  function logText(e){
+      /* even though you only click on one div, all three get logged because each is wrapped
+       inside of another for the middle ones -- this is the concept of bubbling */
+      console.log(this.classList.value);
+      /* the capture of the event goes from the top down -> bod, one, two three, then captures that event and
+      bubbles it back up to the top
+       */
+      e.stopPropagation(); // stop bubbling (this will no longer trigger events on the way back up)
+  }
+
+  document.body.addEventListener('click', logText);
+
+  divs.forEach(div => div.addEventListener('click', logText, {
+      // if capture's set to true, it will capture the first element it hits as it starts to go down for the element clicked on
+      capture: false,
+      // this unbinds the object from the click so it only happens once (good for checkout cart buttons, etc.)
+      once: true
+  }));
+
+  button.addEventListener('click', () => {
+      console.log('click!!')},{
+      once: true
+  });
+
 </script>
 </body>
 </html>
