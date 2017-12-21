@@ -214,6 +214,64 @@
 </style>
 
 <script>
+  // this gets all the direct descendants of the line item
+  const triggers = document.querySelectorAll('.cool > li');
+
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+  function handleEnter(){
+//    console.log('ENTER');
+      /* this is the line item and it's displayed with a display of block in the css just a hair before
+      the opacity of 1 is applied with the second class of trigger-enter-active
+       */
+    this.classList.add('trigger-enter');
+    // this still refers to the line item, but only when written as an es6 arrow function, not a regular function
+    // putting this first class check works like an if statement and ensures even when mousing quickly, it will only add the second class if the first one is there (ie true)
+      setTimeout(() => this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active'), 150);
+
+       // add in the white background for the div
+    background.classList.add('open');
+
+    // this needs to be found dynamically based on whichever dropdown the user is hovering over
+    const dropdown = this.querySelector('.dropdown');
+//    console.log(dropdown);
+
+    // get the coordinates for the nav bar, because that could change its position on the page
+    const navCoords = nav.getBoundingClientRect();
+//    console.log(navCoords);
+
+    // get the coordinates for the dynamically updating dropdowns
+    const dropdownCoords = dropdown.getBoundingClientRect();
+//    console.log(dropdownCoords);
+
+    // put all the coords together for the nav and the dropdown
+      const coords = {
+          height: dropdownCoords.height,
+          width: dropdownCoords.width,
+          top: dropdownCoords.top - navCoords.top, //this accounts for the size of the nav and how much its bumping down the dropdown coords
+          left: dropdownCoords.left - navCoords.left
+      };
+
+      // the nice animations that come as these resize are thanks to the transition on the .dropdownBackground css
+      background.style.setProperty('width', `${coords.width}px`);
+      background.style.setProperty('height', `${coords.height}px`);
+      background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+
+  function handleLeave(){
+//    console.log("LEAVE");
+
+      //and do the reverse on leaving
+    this.classList.remove('trigger-enter-active', 'trigger-enter');
+    background.classList.remove('open');
+
+  }
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
+
 </script>
 
 </body>
