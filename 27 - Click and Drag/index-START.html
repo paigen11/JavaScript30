@@ -35,6 +35,61 @@
   </div>
 
 <script>
+
+  const slider = document.querySelector('.items');
+  // flag variable of if a user is clicking or not
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('active');
+    // to know the exact coordinates of where we clicked inside the div
+//    console.log(e.pageX, e.pageY);
+
+      // this offset accounts for padding and margin before the div with the slider begins
+      startX = e.pageX - slider.offsetLeft;
+
+      // this will keep track of how far we've scrolled over so we can add it to our startX count
+      scrollLeft = slider.scrollLeft;
+
+//      console.log(startX);
+  });
+
+  slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mousemove', (e) => {
+      if(!isDown) return; // stop the function from running unless mouse is down is true
+//    console.count(isDown);
+//    console.log(startX);
+
+      // prevent selecting of text or anything while mousing around
+      e.preventDefault();
+
+      // this is how we determine where the user's moving the mouse around while clicking down
+      const x = e.pageX - slider.offsetLeft;
+//      console.log({x, startX});
+
+      // this indicates whether the mouse is moving right or left from the initial point
+      // for every pixel moved, scroll the slider 3 px left
+      const walk = (x - startX) * 3;
+//      console.log(walk);
+
+      // that's why we capture the scrollLeft in the inital mousedown function - so it can be referenced and subtracted from the walk here
+      slider.scrollLeft = scrollLeft - walk;
+  });
+
+  //todo: challenge, implement ths using drag and drop
+
 </script>
 
   </body>
