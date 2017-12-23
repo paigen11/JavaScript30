@@ -15,6 +15,37 @@
   </div>
 
 <script>
+
+  const speed = document.querySelector('.speed');
+  const bar = speed.querySelector('.speed-bar');
+  const video = document.querySelector('video.flex');
+
+  function handleMove(e){
+      // get the top of the bar;
+      const y = e.pageY - this.offsetTop;
+
+      // get the percentage of the bar where the mouse is over
+      const percent = y / this.offsetHeight;
+
+      // set the min and max for the video speed
+      const min = 0.4;
+      const max = 4;
+
+      // set the height of how much the bar should be filled in
+      const height = Math.round(percent * 100) + '%';
+      bar.style.height = height;
+
+      // figure out the playback rate based on the percent the bar is filled in
+      const playbackRate = percent * (max - min) + min;
+      bar.textContent = playbackRate.toFixed(1) + 'x';
+
+      // finally set the playback rate for the video
+      video.playbackRate = playbackRate;
+
+  }
+
+  speed.addEventListener('mousemove', handleMove);
+
 </script>
 </body>
 </html>
