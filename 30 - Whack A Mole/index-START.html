@@ -36,6 +36,74 @@
   const holes = document.querySelectorAll('.hole');
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
+  let lastHole;
+  let timeUp = false;
+  let score = 0;
+
+  // create a function to generate a random amount of time between a min and max amount
+  function randTime(min, max) {
+      return Math.round(Math.random() * (max - min) + min);
+  }
+
+  // create a function to randomly select a hole from the array list of holes (DOM elements)
+  function randomHole(holes) {
+      const idx = Math.floor(Math.random() * holes.length);
+      const hole = holes[idx];
+      // check if same hole is called again and if it is, rerun the function again
+      if(hole === lastHole){
+          console.log('Ah nah, thats the same hole as last time');
+          // recursion!
+          return randomHole(holes);
+      }
+//      console.log(hole);
+
+      // this will save the reference to what the last hole was that popped up
+      lastHole = hole;
+
+      return hole;
+  }
+
+  // create a function to make the moles peep
+  function peep() {
+      const time = randTime(200, 1000);
+      const hole = randomHole(holes);
+
+//      console.log(time, hole);
+      // add the class of up to make the moles appear
+      hole.classList.add('up');
+
+      setTimeout(() =>{
+          // this will keep the game running until timeUp is set to false
+          if(!timeUp) peep();
+
+          // remove the class once the time to show is done
+          hole.classList.remove('up');
+      }, time)
+  }
+
+  function startGame(){
+      // reset the scoreboard
+      scoreBoard.textContent = 0;
+      score = 0;
+      timeUp = false;
+      peep();
+      // set the variable timeUp equal to true to give the game an ending
+      setTimeout(() => {
+          timeUp = true;
+      }, 10000);
+
+  }
+
+  function bonk(e){
+      console.log(e);
+      if(!e.isTrusted) return; // cheater!
+      // otherwise increase the score, and remove the up class from the mole just clicked
+      score++;
+      this.classList.remove('up');
+      scoreBoard.textContent = score;
+  }
+
+  moles.forEach(mole => mole.addEventListener('click', bonk));
 
 </script>
 </body>
