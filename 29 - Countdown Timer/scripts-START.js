@@ -4,6 +4,9 @@ const endTime = document.querySelector('.display__end-time');
 const buttons = document.querySelectorAll('[data-time]');
 
 function timer(seconds) {
+    // clear any existing timer when a new timer is started
+    clearInterval(countdown);
+
     // figure out when the timer started
     const now = Date.now();
 
@@ -25,7 +28,7 @@ function timer(seconds) {
         }
 
         // display countdown interval through displayTimeLeft function
-        console.log(displayTimeLeft(secondsLeft));
+        // console.log(displayTimeLeft(secondsLeft));
 
     }, 1000);
 }
@@ -56,7 +59,20 @@ function displayEndTime(timestamp){
 }
 
 function startTimer(){
-    console.log(this.dataset.time);
+    // turn the seconds string from the html data element into a number
+    const seconds = parseInt(this.dataset.time);
+
+    // call the timer function on the seoncs
+    timer(seconds);
 }
 
 buttons.forEach(button => button.addEventListener('click', startTimer));
+
+document.customForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    const mins = this.minutes.value;
+    // console.log(mins);
+    timer(mins * 60);
+    this.reset();
+
+});
